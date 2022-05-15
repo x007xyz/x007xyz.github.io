@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>构建uniapp(微信小程序)发布平台 | Hexo</title>
+  <meta name="description" content="构建uniapp(微信小程序)发布平台目录 node.js调用shell命令    原生模块child_process    shelljs    simple-git操作git    发布小程序流程    拉取代码    发布并上传微信小程序    使用koa构建服务    通过websocket调用接口   其他    环境    配置    参考链接     node.js调用shell命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="构建uniapp(微信小程序)发布平台">
+<meta property="og:url" content="http://example.com/2022/05/15/%E6%9E%84%E5%BB%BAuniapp(%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F)%E5%8F%91%E5%B8%83%E5%B9%B3%E5%8F%B0/index.html">
+<meta property="og:site_name" content="x007xyz blog">
+<meta property="og:description" content="构建uniapp(微信小程序)发布平台目录 node.js调用shell命令    原生模块child_process    shelljs    simple-git操作git    发布小程序流程    拉取代码    发布并上传微信小程序    使用koa构建服务    通过websocket调用接口   其他    环境    配置    参考链接     node.js调用shell命令">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-15T06:07:06.000Z">
+<meta property="article:modified_time" content="2022-05-15T14:43:14.090Z">
+<meta property="article:author" content="x007xyz">
+<meta property="article:tag" content="uniapp">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2022/05/15/%E6%9E%84%E5%BB%BAuniapp(%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F)%E5%8F%91%E5%B8%83%E5%B9%B3%E5%8F%B0/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="x007xyz blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">chen</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer &amp; Designer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Hangzhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitLab/" rel="tag">GitLab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/uniapp/" rel="tag">uniapp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vscode/" rel="tag">vscode</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/GitLab/" style="font-size: 13px;">GitLab</a> <a href="/tags/Github/" style="font-size: 13px;">Github</a> <a href="/tags/Hexo/" style="font-size: 13px;">Hexo</a> <a href="/tags/uniapp/" style="font-size: 13px;">uniapp</a> <a href="/tags/vscode/" style="font-size: 13px;">vscode</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/15/hello-world/" class="title">Hello World</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-15T14:39:21.602Z" itemprop="datePublished">2022-05-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/15/%E6%9E%84%E5%BB%BAuniapp(%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F)%E5%8F%91%E5%B8%83%E5%B9%B3%E5%8F%B0/" class="title">构建uniapp(微信小程序)发布平台</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-15T06:07:06.000Z" itemprop="datePublished">2022-05-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/09/02/%E5%9C%A8vscode%E4%BD%BF%E7%94%A8%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E5%BA%8A/" class="title">在vscode使用七牛云图床</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-09-02T07:38:30.000Z" itemprop="datePublished">2021-09-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/09/01/%E4%BD%BF%E7%94%A8git-issue%E8%BF%9B%E8%A1%8C%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" class="title">使用Issue进行项目管理</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-09-01T07:46:08.000Z" itemprop="datePublished">2021-09-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/08/31/%E4%BD%BF%E7%94%A8Hexo%E6%9E%84%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2/" class="title">使用Hexo构建自己的博客</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-08-31T05:44:23.000Z" itemprop="datePublished">2021-08-31</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-构建uniapp(微信小程序)发布平台" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      构建uniapp(微信小程序)发布平台
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/15/%E6%9E%84%E5%BB%BAuniapp(%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F)%E5%8F%91%E5%B8%83%E5%B9%B3%E5%8F%B0/" class="article-date">
+	  <time datetime="2022-05-15T06:07:06.000Z" itemprop="datePublished">2022-05-15</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/uniapp/" rel="tag">uniapp</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/15/%E6%9E%84%E5%BB%BAuniapp(%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F)%E5%8F%91%E5%B8%83%E5%B9%B3%E5%8F%B0/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="构建uniapp-微信小程序-发布平台"><a href="#构建uniapp-微信小程序-发布平台" class="headerlink" title="构建uniapp(微信小程序)发布平台"></a>构建uniapp(微信小程序)发布平台</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><p><a href="#nodejs%E8%B0%83%E7%94%A8shell%E5%91%BD%E4%BB%A4">node.js调用shell命令</a></p>
+<ul>
+<li><p>  <a href="#%E5%8E%9F%E7%94%9F%E6%A8%A1%E5%9D%97child_process">原生模块child_process</a></p>
+</li>
+<li><p>  <a href="#shelljs">shelljs</a></p>
+</li>
+<li><p>  <a href="#simple-git%E6%93%8D%E4%BD%9Cgit">simple-git操作git</a></p>
+</li>
+</ul>
+</li>
+<li><p><a href="#%E5%8F%91%E5%B8%83%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B">发布小程序流程</a></p>
+<ul>
+<li><p>  <a href="#%E6%8B%89%E5%8F%96%E4%BB%A3%E7%A0%81">拉取代码</a></p>
+</li>
+<li><p>  <a href="#%E5%8F%91%E5%B8%83%E5%B9%B6%E4%B8%8A%E4%BC%A0%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F">发布并上传微信小程序</a></p>
+</li>
+</ul>
+</li>
+<li><p><a href="#%E4%BD%BF%E7%94%A8koa%E6%9E%84%E5%BB%BA%E6%9C%8D%E5%8A%A1">使用koa构建服务</a></p>
+<ul>
+<li>  <a href="#%E9%80%9A%E8%BF%87websocket%E8%B0%83%E7%94%A8%E6%8E%A5%E5%8F%A3">通过websocket调用接口</a></li>
+</ul>
+</li>
+<li><p><a href="#%E5%85%B6%E4%BB%96">其他</a></p>
+<ul>
+<li><p>  <a href="#%E7%8E%AF%E5%A2%83">环境</a></p>
+</li>
+<li><p>  <a href="#%E9%85%8D%E7%BD%AE">配置</a></p>
+</li>
+<li><p>  <a href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5">参考链接</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="node-js调用shell命令"><a href="#node-js调用shell命令" class="headerlink" title="node.js调用shell命令"></a>node.js调用shell命令</h2><p>要实现自动发布微信小程序，我们需要拉取代码和调用hbuilder，这些都依赖<code>shell</code>脚本，所以我们先来了解一下如何在<code>node.js</code>中调用<code>shell</code>命令。</p>
+<h3 id="原生模块child-process"><a href="#原生模块child-process" class="headerlink" title="原生模块child_process"></a>原生模块child_process</h3><p>在<code>node.js</code>中可以使用原生的<code>child_process</code>模块来调用<code>shell</code>命令的形式来执行<code>git</code>命令，调用的两种方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">child_process.exec(<span class="built_in">command</span>[, options][, callback])</span><br><span class="line">child_process.execFile(file[, args][, options][, callback])</span><br></pre></td></tr></table></figure>
+
+<p>例如执行拉取代码的命令就是<code>child_process.exec(&#39;git pull&#39;)</code>；</p>
+<h3 id="shelljs"><a href="#shelljs" class="headerlink" title="shelljs"></a>shelljs</h3><p>我们也可以借助第三方库<code>shelljs</code>，它是基于node的一个扩展，比原生的child_process兼容性更好，使用更灵活。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> shell = <span class="built_in">require</span>(<span class="string">&#x27;shelljs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!shell.<span class="title function_">which</span>(<span class="string">&#x27;git&#x27;</span>)) &#123;</span><br><span class="line">  shell.<span class="title function_">echo</span>(<span class="string">&#x27;Sorry, this script requires git&#x27;</span>);</span><br><span class="line">  shell.<span class="title function_">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Copy files to release dir</span></span><br><span class="line">shell.<span class="title function_">rm</span>(<span class="string">&#x27;-rf&#x27;</span>, <span class="string">&#x27;out/Release&#x27;</span>);</span><br><span class="line">shell.<span class="title function_">cp</span>(<span class="string">&#x27;-R&#x27;</span>, <span class="string">&#x27;stuff/&#x27;</span>, <span class="string">&#x27;out/Release&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Replace macros in each .js file</span></span><br><span class="line">shell.<span class="title function_">cd</span>(<span class="string">&#x27;lib&#x27;</span>);</span><br><span class="line">shell.<span class="title function_">ls</span>(<span class="string">&#x27;*.js&#x27;</span>).<span class="title function_">forEach</span>(<span class="keyword">function</span> (<span class="params">file</span>) &#123;</span><br><span class="line">  shell.<span class="title function_">sed</span>(<span class="string">&#x27;-i&#x27;</span>, <span class="string">&#x27;BUILD_VERSION&#x27;</span>, <span class="string">&#x27;v0.1.2&#x27;</span>, file);</span><br><span class="line">  shell.<span class="title function_">sed</span>(<span class="string">&#x27;-i&#x27;</span>, <span class="regexp">/^.*REMOVE_THIS_LINE.*$/</span>, <span class="string">&#x27;&#x27;</span>, file);</span><br><span class="line">  shell.<span class="title function_">sed</span>(<span class="string">&#x27;-i&#x27;</span>, <span class="regexp">/.*REPLACE_LINE_WITH_MACRO.*\n/</span>, shell.<span class="title function_">cat</span>(<span class="string">&#x27;macro.js&#x27;</span>), file);</span><br><span class="line">&#125;);</span><br><span class="line">shell.<span class="title function_">cd</span>(<span class="string">&#x27;..&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Run external tool synchronously</span></span><br><span class="line"><span class="keyword">if</span> (shell.<span class="title function_">exec</span>(<span class="string">&#x27;git commit -am &quot;Auto-commit&quot;&#x27;</span>).<span class="property">code</span> !== <span class="number">0</span>) &#123;</span><br><span class="line">  shell.<span class="title function_">echo</span>(<span class="string">&#x27;Error: Git commit failed&#x27;</span>);</span><br><span class="line">  shell.<span class="title function_">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="simple-git操作git"><a href="#simple-git操作git" class="headerlink" title="simple-git操作git"></a>simple-git操作git</h3><p>如果操作git命令我们可以使用专门为git设置的库simple-git，示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> simpleGit = <span class="built_in">require</span>(<span class="string">&#x27;simple-git/promise&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">gitinit</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> projectPath = path.<span class="title function_">join</span>(__dirname);</span><br><span class="line">  <span class="keyword">const</span> cmd = <span class="string">&quot;init&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> args = <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> git = <span class="title function_">simpleGit</span>(projectPath);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> res = <span class="keyword">await</span> git[cmd](args);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">info</span>(<span class="string">&quot;res:&quot;</span>, res);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;执行 simple-git 命令时发生错误&#x27;</span>, &#123;</span><br><span class="line">      projectPath,</span><br><span class="line">      cmd,</span><br><span class="line">      args</span><br><span class="line">    &#125;, e);</span><br><span class="line">    <span class="keyword">throw</span> e;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">gitinit</span>();</span><br></pre></td></tr></table></figure>
+
+<h2 id="发布小程序流程"><a href="#发布小程序流程" class="headerlink" title="发布小程序流程"></a>发布小程序流程</h2><p>我们先梳理一下，uniapp开发正常发布小程序的简单流程。</p>
+<ol>
+<li><p> 首先拉取最新的代码</p>
+</li>
+<li><p> 使用hbuilder打包并发行</p>
+</li>
+<li><p> 使用微信小程序开发工具上传体验版</p>
+</li>
+</ol>
+<p>以上三个步骤就是小程序发布的简单流程了，我们只需要能够使用代码实现上述的步骤就可以达到我们需求了。下面我们来使用<code>node.js</code>来实现一下：</p>
+<h3 id="拉取代码"><a href="#拉取代码" class="headerlink" title="拉取代码"></a>拉取代码</h3><p>使用<code>git</code>命令我们就可以拉取代码了，借助<code>simple-git</code>我们就可以在<code>node.js</code>中操作<code>git</code>。</p>
+<p>在一般情况下，项目应该是都已经在本地了，我们只需要使用<code>git pull</code>拉取最新代码就可以了，但是我们也应该兼容本地代码仓库不存在的情况；现在我们开始构建项目。</p>
+<p>首先我们需要创建一个文件夹<code>project</code>用来放置我们从远端来取下拉的项目，然后创建<code>publish.js</code>用来编写发布逻辑，我们先添加拉取项目的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Git</span> = <span class="built_in">require</span>(<span class="string">&#x27;simple-git&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> fse = <span class="built_in">require</span>(<span class="string">&#x27;fs-extra&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> dirPath = path.<span class="title function_">join</span>(__dirname, <span class="string">`./project/<span class="subst">$&#123;data.name&#125;</span>`</span>)</span><br><span class="line"><span class="keyword">let</span> git = <span class="literal">null</span></span><br><span class="line"><span class="comment">// 查看项目是否存在</span></span><br><span class="line"><span class="keyword">if</span> (!fse.<span class="title function_">pathExistsSync</span>(dirPath)) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;项目不存在，开始创建项目&#x27;</span>)</span><br><span class="line">  <span class="comment">// 不存在则git clone</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title class_">Git</span>().<span class="title function_">clone</span>(remoteUrl, dirPath)</span><br><span class="line">  git = <span class="title class_">Git</span>(dirPath)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;项目存在，拉取最新代码&#x27;</span>)</span><br><span class="line">  <span class="comment">// 存在则git pull</span></span><br><span class="line">  git = <span class="title class_">Git</span>(dirPath)</span><br><span class="line">  <span class="keyword">const</span> logs = <span class="keyword">await</span> git.<span class="title function_">pull</span>()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 获取信息的提交信息</span></span><br><span class="line"><span class="keyword">const</span> logs = <span class="keyword">await</span> git.<span class="title function_">log</span>(&#123; <span class="attr">maxCount</span>: <span class="number">10</span> &#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="发布并上传微信小程序"><a href="#发布并上传微信小程序" class="headerlink" title="发布并上传微信小程序"></a>发布并上传微信小程序</h3><p>通过hbuilder提供的<a target="_blank" rel="noopener" href="https://hx.dcloud.net.cn/cli/publish-mp-weixin" title="cli命令行工具">cli命令行工具</a>我们可以直接使用一行shell命令发布并上传微信小程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编译uni-app项目到微信小程序，并发行小程序到微信平台 </span></span><br><span class="line">cli publish --platform mp-weixin --project 项目名称 --upload <span class="literal">true</span> --appid 小程序appid --description 发布描述 --version 发布版本 --privatekey 小程序上传密钥文件</span><br></pre></td></tr></table></figure>
+
+<p>发布微信小程序之前，我们需要先将拉取下来的项目使用hbuilder打开，cli命令行工具也提供了这样的功能。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cli project open --path 项目路径</span><br></pre></td></tr></table></figure>
+
+<p>因为我们的项目可能使用了npm包，所以要在发布之前安装所有的npm包。</p>
+<p>所以发布命令的执行过程是：</p>
+<ol>
+<li><p> 运行<code>yarn</code>，安装第三方包</p>
+</li>
+<li><p> 使用hbuilder打开项目</p>
+</li>
+<li><p> 使用hbuilder打包并上传微信小程序</p>
+</li>
+</ol>
+<p>对应的代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dirPath 是项目路径，config.cli是cli路径</span></span><br><span class="line"><span class="comment">// 打开项目并执行yarn命令</span></span><br><span class="line">shell.<span class="title function_">exec</span>(<span class="string">`cd <span class="subst">$&#123;dirPath&#125;</span> &amp;&amp; yarn`</span>)</span><br><span class="line"><span class="comment">// 使用hbuilder打开项目</span></span><br><span class="line">shell.<span class="title function_">exec</span>(<span class="string">`<span class="subst">$&#123;config.cli&#125;</span> project open --path <span class="subst">$&#123;dirPath&#125;</span>`</span>)</span><br><span class="line"><span class="comment">// 使用hbuilder打包并上传微信小程序</span></span><br><span class="line">shell.<span class="title function_">exec</span>(</span><br><span class="line">  <span class="string">`<span class="subst">$&#123;config.cli&#125;</span> publish --platform mp-weixin --project <span class="subst">$&#123;name&#125;</span> --upload true --appid <span class="subst">$&#123;appid&#125;</span> --description <span class="subst">$&#123;versionDesc&#125;</span> --version <span class="subst">$&#123;version&#125;</span> --privatekey <span class="subst">$&#123;privatekey&#125;</span>`</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用koa构建服务"><a href="#使用koa构建服务" class="headerlink" title="使用koa构建服务"></a>使用koa构建服务</h2><p>完成上面的流程之后，我们使用<code>node.js</code>自动发布小程序了，但是实际的应用中，我们需要把这个能力提供给所有的人，所以我们使用<code>koa</code>构建web服务将发布的能力对外开放。我们先构建一个简单的<code>koa</code>服务：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Koa</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> <span class="title class_">Koa</span>();</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Router</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> bodyParser = <span class="built_in">require</span>(<span class="string">&#x27;koa-bodyparser&#x27;</span>);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">bodyParser</span>());</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> render = <span class="built_in">require</span>(<span class="string">&#x27;koa-art-template&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">render</span>(app, &#123;</span><br><span class="line">  <span class="attr">root</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;view&#x27;</span>),</span><br><span class="line">  <span class="attr">extname</span>: <span class="string">&#x27;.art&#x27;</span>,</span><br><span class="line">  <span class="attr">debug</span>: process.<span class="property">env</span>.<span class="property">NODE_ENV</span> !== <span class="string">&#x27;production&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> ctx.<span class="title function_">render</span>(<span class="string">&#x27;user&#x27;</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(router.<span class="title function_">routes</span>()).<span class="title function_">use</span>(router.<span class="title function_">allowedMethods</span>());</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(<span class="number">3000</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;server is running on port 3000&#x27;</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过websocket调用接口"><a href="#通过websocket调用接口" class="headerlink" title="通过websocket调用接口"></a>通过websocket调用接口</h3><p>发布微信小程序是一个比较漫长的过程，如果在调用的过程中一直不给页面反馈对用户就非常不友好了；而且同一个微信小程序如果正在发布中，不应该能够再次调用发布接口，所以我们使用websocket进行数据交互；现在在<code>koa</code>添加<code>websocket</code>，然后使用<code>websocket</code>返回打印信息：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> websockify = <span class="built_in">require</span>(<span class="string">&#x27;koa-websocket&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">websockify</span>(<span class="keyword">new</span> <span class="title class_">Koa</span>());</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 定义websocket连接</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> wsRouter = <span class="keyword">new</span> <span class="title class_">Router</span>()</span><br><span class="line"></span><br><span class="line">wsRouter.<span class="title function_">get</span>(<span class="string">&#x27;/ws/publish/:name&#x27;</span>, <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;ctx&#x27;</span>, ctx.<span class="property">params</span>);</span><br><span class="line">  <span class="built_in">require</span>(<span class="string">&#x27;./publish&#x27;</span>)(ctx.<span class="property">websocket</span>, ctx.<span class="property">params</span>.<span class="property">name</span>)</span><br><span class="line">  ctx.<span class="property">websocket</span>.<span class="title function_">on</span>(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="params">msg</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;前端发过来的数据：&#x27;</span>, msg)</span><br><span class="line">  &#125;)</span><br><span class="line">  ctx.<span class="property">websocket</span>.<span class="title function_">on</span>(<span class="string">&#x27;close&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;前端关闭了websocket&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.<span class="property">ws</span>.<span class="title function_">use</span>(wsRouter.<span class="title function_">routes</span>()).<span class="title function_">use</span>(wsRouter.<span class="title function_">allowedMethods</span>());</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ol>
+<li><p> mac系统主机（或者window系统主机），因为hbuilder和小程序开发工具只有mac/window版本</p>
+</li>
+<li><p> 安装<code>node.js</code>和<code>yarn</code>，推荐使用<code>nvm</code>进行管理</p>
+</li>
+<li><p> 下载安装<a target="_blank" rel="noopener" href="https://www.dcloud.io/hbuilderx.html" title="hbuilder">hbuilder</a>和<a target="_blank" rel="noopener" href="https://ext.dcloud.net.cn/plugin?name=weapp-miniprogram-ci" title="微信小程序上传CI插件">微信小程序上传CI插件</a></p>
+</li>
+<li><p> 下载安装<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" title="微信小程序开发工具">微信小程序开发工具</a></p>
+</li>
+<li><p> 安装<a target="_blank" rel="noopener" href="https://git-scm.com/downloads" title="git工具">git工具</a></p>
+</li>
+</ol>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ol>
+<li><p> git拉取项目需要<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/153709.html" title="配置SSH密钥">配置SSH密钥</a></p>
+</li>
+<li><p> <a target="_blank" rel="noopener" href="https://hx.dcloud.net.cn/cli/README" title="hbulider cli命令行工具">hbulider cli命令行工具</a>的相关配置</p>
+</li>
+</ol>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1812689" title="NodeJS运行Shell的方式及搭建运维平台">NodeJS运行Shell的方式及搭建运维平台</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2022/05/15/%E6%9E%84%E5%BB%BAuniapp(%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F)%E5%8F%91%E5%B8%83%E5%B9%B3%E5%8F%B0/" title="构建uniapp(微信小程序)发布平台" target="_blank" rel="external">http://example.com/2022/05/15/构建uniapp(微信小程序)发布平台/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">chen</span><small class="ml-1x">Web Developer &amp; Designer</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/05/15/hello-world/" title="Hello World"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2021/09/02/%E5%9C%A8vscode%E4%BD%BF%E7%94%A8%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E5%BA%8A/" title="在vscode使用七牛云图床"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
